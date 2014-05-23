@@ -32,6 +32,12 @@ module Net; module SSH
         MAP.fetch(name).new
       end
 
+      # Create an SSH Keypair
+      # ex: Net::SSH:KeyFactory.create_key_pair( :filename => "#{settings.app_path}/keys/#{user}_rsa)", :passphrase="test", :comment => "test")
+      def create_key_pair(filename, type=OpenSSL::PKey::RSA, bits=4096, passphrase=nil, ask_passphrase=true, comment=nil)
+        %x[ssh-keygen -t #{type} -b #{bits} -q -C "#{comment}" -f #{filename} -N'#{passphrase}' ]
+      end
+
       # Loads a private key from a file. It will correctly determine
       # whether the file describes an RSA or DSA key, and will load it
       # appropriately. The new key is returned. If the key itself is
